@@ -21,15 +21,14 @@ public class View extends JFrame {
 
         public int pedirEntero (String mensaje){
             String dato = JOptionPane.showInputDialog(null, mensaje);
-            int numero = Integer.parseInt(dato);
-            return (numero);
+            return (Integer.parseInt(dato));
         }
 
         public String mostrarensaje (String mensaje){
             JOptionPane.showMessageDialog(null, mensaje);
 
             return mensaje;
-
+// xd
         }
     }
 
