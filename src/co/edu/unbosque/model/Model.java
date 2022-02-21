@@ -2,17 +2,19 @@ package co.edu.unbosque.model;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 import com.opencsv.*;
 import com.opencsv.exceptions.CsvValidationException;
 
-public class Model {
-    private ArrayList<String[]> array = new ArrayList<>();
+public class Model{
+    private ArrayList<Register> array = new ArrayList<>();
     private final File f = new File("src/data.csv");
 
 
-    public Model(){
+    public Model() {
+        this.array = array;
     }
 
     public void uploadData() {
@@ -26,9 +28,10 @@ public class Model {
             line = reader.readNext();
 
             while (line!=null){
-                array.add(line);
+                array.add(new Register(line[0], line[1], line[2], line[3], line[4],line[5], line[6], line[7] ));
                 line = reader.readNext();
             }
+            array.remove(0);
             reader.close();
         }
         catch (CsvValidationException ex) {
@@ -46,10 +49,10 @@ public class Model {
     public float sumTotalSales(){
         float total = 0;
 
-        for(int i=1;i<array.size();i++){
-            String[] aux = array.get(i).clone();
-            float x = Float.parseFloat(aux[3]);
-            float y = Float.parseFloat(aux[5]);
+        for(int i=0;i<array.size();i++){
+            Register aux = array.get(i);
+            float x = Float.parseFloat(aux.getQty());
+            float y = Float.parseFloat(aux.getUnitPrice());
 
             float mul = x*y;
 
@@ -61,11 +64,11 @@ public class Model {
 
     public String findByInvoiceNo(String invoiceNo){
         String items="";
-        for(int i=1;i<array.size();i++){
-            String[] aux = array.get(i).clone();
-            if (aux[0].equals(invoiceNo)){
+        for(int i=0;i<array.size();i++){
+            Register aux = array.get(i);
+            if (aux.getInvoiceNo().equals(invoiceNo)){
 
-                items += Arrays.toString(aux) +"\n";
+                items += aux +"\n";
             }
         }
 
@@ -76,10 +79,10 @@ public class Model {
 
         int counter=0;
 
-        for(int i=1;i<array.size();i++){
-            String[] aux = array.get(i).clone();
-            if (aux[1].equals(stockCode)){
-                counter+=1;
+        for(int i=0;i<array.size();i++){
+            Register aux = array.get(i);
+            if (aux.getStockCode().equals(stockCode)){
+                counter+=Integer.parseInt(aux.getQty());
             }
         }
 
@@ -88,7 +91,7 @@ public class Model {
 
     public String avgMonthlySales(boolean groupByCountry){
 
-        ArrayList<String> country = new ArrayList(10);
+        ArrayList<String> country = new ArrayList();
         country.add("");
         ArrayList<Float> totalByCountry = new ArrayList<Float>();
         totalByCountry.add((float) 0);
@@ -98,25 +101,25 @@ public class Model {
        if(groupByCountry==false){
 
            float total = sumTotalSales();
-           float promedio = total/12;
-           String out = "Promedio mensual: "+String.valueOf(promedio);
+           float avg = total/12;
+           String out = "Promedio mensual: "+String.valueOf(avg);
            return out;
 
        }else if(groupByCountry){
-           for(int i=1;i<array.size();i++){
-               String[] aux = array.get(i).clone();
-               int index = country.indexOf(aux[7]);
+           for(int i=0;i<array.size();i++){
+               Register aux = array.get(i);
+               int index = country.indexOf(aux.getCountry());
                if(index==-1){
-                  country.add(index+j, aux[7]);
+                  country.add(index+j, aux.getCountry());
                   j++;
                }
            }
-           for(int i=1;i<array.size();i++){
-               String[] aux = array.get(i).clone();
-               int index = country.indexOf(aux[7]);
+           for(int i=0;i<array.size();i++){
+               Register aux = array.get(i);
+               int index = country.indexOf(aux.getCountry());
 
-               float x = Float.parseFloat(aux[3]);
-               float y = Float.parseFloat(aux[5]);
+               float x = Float.parseFloat(aux.getQty());
+               float y = Float.parseFloat(aux.getUnitPrice());
 
                float mul = x*y;
                if(index<=in){
@@ -132,8 +135,8 @@ public class Model {
            }
 
            float total = sumTotalSales();
-           float promedio = total/12;
-           String out = "Promedio mensual: "+String.valueOf(promedio)+"\n";
+           float average = total/12;
+           String out = "Average Monthly Sales: "+String.valueOf(average)+"\n";
 
            for(int i=0;i<totalByCountry.size();i++){
                float avg = totalByCountry.get(i)/12;
@@ -150,11 +153,51 @@ public class Model {
        return "";
     }
 
-    public ArrayList<String[]> getArray() {
+    public String findPartiallyByDescription(String search, boolean order, int intMonth, int endMonth){
+
+        if (order==false){
+            for(int i=0;i<array.size();i++){
+                Register aux = array.get(i);
+                String invoiceDate = aux.getDate().split("/",2)[0];
+                if (aux.getDescription().contains(search)) {
+                    if(Integer.parseInt(invoiceDate)>=intMonth&&Integer.parseInt(invoiceDate)<=endMonth){
+                        System.out.println(aux.getDescription()+": "+aux.getQty());
+                    }
+                }
+            }
+        }else if (order){
+            Collections.sort(array, new Comparator<Register>() {
+                @Override
+                public int compare(Register o1, Register o2) {
+                    return new Integer(Integer.parseInt(o2.getQty())).compareTo(new Integer(Integer.parseInt(o1.getQty())));
+                }
+            });
+
+            for(int i=0;i<array.size();i++){
+                Register aux = array.get(i);
+                String invoiceDate = aux.getDate().split("/",2)[0];
+                if (aux.getDescription().contains(search)) {
+                    if(Integer.parseInt(invoiceDate)>=intMonth&&Integer.parseInt(invoiceDate)<=endMonth){
+                        System.out.println(aux.getDescription()+": "+aux.getQty());
+                    }
+                }
+            }
+        }
+
+
+
+        return "";
+    }
+
+    public ArrayList<Register> getArray() {
         return array;
     }
 
-    public void setArray(ArrayList<String[]> array) {
+    public void setArray(ArrayList<Register> array) {
         this.array = array;
+    }
+
+    public File getF() {
+        return f;
     }
 }
