@@ -1,13 +1,8 @@
 package co.edu.unbosque.view;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class View extends JFrame {
-
-    public static void main(String[] args) {
-
-    }
 
     public View() {
 
