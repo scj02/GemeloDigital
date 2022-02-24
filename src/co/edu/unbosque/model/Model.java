@@ -9,15 +9,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * The type Model.
+ */
 public class Model {
     private ArrayList<Register> array = new ArrayList<>();
     private final File f = new File("src/data.csv");
 
 
+    /**
+     * Instantiates a new Model.
+     */
     public Model() {
         this.array = array;
     }
 
+    /**
+     * Upload data.
+     */
     public void uploadData() {
 
         String[] line;
@@ -41,6 +50,11 @@ public class Model {
 
     }
 
+    /**
+     * Sum total sales float.
+     *
+     * @return the float
+     */
     public float sumTotalSales() {
         float total = 0;
 
@@ -57,6 +71,12 @@ public class Model {
         return total;
     }
 
+    /**
+     * Find by invoice no string.
+     *
+     * @param invoiceNo the invoice no
+     * @return the string
+     */
     public String findByInvoiceNo(String invoiceNo) {
         String items = "";
         for (int i = 0; i < array.size(); i++) {
@@ -70,6 +90,12 @@ public class Model {
         return items;
     }
 
+    /**
+     * Count by stock code int.
+     *
+     * @param stockCode the stock code
+     * @return the int
+     */
     public int countByStockCode(String stockCode) {
 
         int counter = 0;
@@ -84,6 +110,12 @@ public class Model {
         return counter;
     }
 
+    /**
+     * Avg monthly sales string.
+     *
+     * @param groupByCountry the group by country
+     * @return the string
+     */
     public String avgMonthlySales(boolean groupByCountry) {
 
         ArrayList<String> country = new ArrayList();
@@ -145,6 +177,15 @@ public class Model {
 
     }
 
+    /**
+     * Find partially by description string.
+     *
+     * @param search   the search
+     * @param order    the order
+     * @param intMonth the int month
+     * @param endMonth the end month
+     * @return the string
+     */
     public String findPartiallyByDescription(String search, boolean order, int intMonth, int endMonth) {
 
         if (order == false) {
@@ -180,14 +221,29 @@ public class Model {
         return "";
     }
 
+    /**
+     * Gets array.
+     *
+     * @return the array
+     */
     public ArrayList<Register> getArray() {
         return array;
     }
 
+    /**
+     * Sets array.
+     *
+     * @param array the array
+     */
     public void setArray(ArrayList<Register> array) {
         this.array = array;
     }
 
+    /**
+     * Gets f.
+     *
+     * @return the f
+     */
     public File getF() {
         return f;
     }
