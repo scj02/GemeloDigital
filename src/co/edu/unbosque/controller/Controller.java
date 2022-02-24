@@ -39,14 +39,6 @@ public class Controller {
 
         System.out.println(m.countByStockCode("22623"));
 
-        String stockNumbers ;
-        do {
-            String b = v.pedirEntero();
-            stockNumbers = m.findByInvoiceNo(b);
-        }
-        while (stockNumbers.length() == 0);
-        System.out.println(stockNumbers);
-
     }
 }
 
