@@ -1,5 +1,4 @@
 # GitTutorial
 //Integrantes del grupo:
-//Rasbel Castellano
-//Gabriel Maldonado
+//Johan Ayala
 //Cristian Cruz
